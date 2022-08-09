@@ -1,15 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>509e9cb8-909a-4608-8ccf-58fdec8a82b2</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\BuberDinner.Application\BuberDinner.Application.csproj" />
     <ProjectReference Include="..\BuberDinner.Contracts\BuberDinner.Contracts.csproj" />
