@@ -1,6 +1,7 @@
 using BuberDinner.Api.Controllers;
 using BuberDinner.Application.Authentication.Commands.Register;
-using BuberDinner.Application.Services.Authentication;
+using BuberDinner.Application.Authentication.Common;
+using BuberDinner.Application.Authentication.Queries.Login;
 using BuberDinner.Contracts.Authentication;
 using ErrorOr;
 using MediatR;
@@ -11,9 +12,9 @@ namespace BuberDinner.Api.Controller;
 [Route("auth")]
 public class AuthenticationController : ApiController
 {
-    private readonly IMediator _mediator;
+    private readonly ISender _mediator;
 
-    public AuthenticationController(IMediator _mediator)
+    public AuthenticationController(ISender _mediator)
     {
         this._mediator = _mediator;
     }
@@ -42,9 +43,10 @@ public class AuthenticationController : ApiController
     }
 
     [HttpPost("login")]
-    public IActionResult Login(LoginRequest request)
+    public async Task<IActionResult> Login(LoginRequest request)
     {
-        var authResult = _authenticationService.Login(request.Email, request.Password);
+        var query = new LoginQuery(request.Email, request.Password);
+        var authResult = await _mediator.Send(query);
 
     if(authResult.IsError && authResult.FirstError == Domain.Common.Errors.Errors.Authentication.InvalidCredentials){
         return Problem(statusCode: StatusCodes.Status401Unauthorized,

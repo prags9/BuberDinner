@@ -6,11 +6,9 @@ using BuberDinner.Application.Authentication.Common;
 using ErrorOr;
 using MediatR;
 
-namespace BuberDinner.Application.Authentication.Commands.Register
+namespace BuberDinner.Application.Authentication.Queries.Login
 {
-    public record RegisterCommand(string FirstName,
-                                  string LastName,
-                                  string Email,
+    public record LoginQuery(string Email,
                                   string Password) : IRequest<ErrorOr<AuthenticationResult>>;
     
 }

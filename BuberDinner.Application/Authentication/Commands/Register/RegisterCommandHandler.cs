@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using BuberDinner.Application.Common.Interfaces.Authentication;
 using BuberDinner.Application.Common.Interfaces.Persistence;
-using BuberDinner.Application.Services.Authentication;
+using BuberDinner.Domain.Entities;
 using ErrorOr;
 using MediatR;
+using BuberDinner.Domain.Common.Errors;
+using BuberDinner.Application.Authentication.Common;
 
 namespace BuberDinner.Application.Authentication.Commands.Register
 {
@@ -21,18 +23,18 @@ namespace BuberDinner.Application.Authentication.Commands.Register
             _userRepository = userRepository;
         }
 
-        public Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
         {
             //1. Validate the user doesn't exist.
-        if(_userRepository.GetUserByEmail(email) is not null){
+        if(_userRepository.GetUserByEmail(command.Email) is not null){
             return Errors.User.DuplicateEmail;
         }
         //2. create user (and generate a unique id) & persist to DB.
         var user = new User{
-            FirstName = firstName,
-            Lastname = lastName,
-            Email = email,
-            Password = password
+            FirstName = command.FirstName,
+            Lastname = command.LastName,
+            Email = command.Email,
+            Password = command.Password
         };
 
         _userRepository.Add(user);
